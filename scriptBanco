@@ -1,0 +1,49 @@
+-- Criação da base de dados
+CREATE DATABASE africel;
+USE africel;
+-- Tabela USUARIO
+CREATE TABLE USUARIO (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nome_completo VARCHAR(100) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    genero VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    foto_webcam varchar(255)
+);
+-- Tabela DOCUMENTO (Documento)
+CREATE TABLE DOCUMENTO (
+    id_documento INT AUTO_INCREMENT PRIMARY KEY,
+    numero_bi VARCHAR(50) UNIQUE NOT NULL,
+    imagem_bi_frente varchar(255),
+	imagem_bi_verso varchar(255),
+    data_emissao DATE NOT NULL,
+    id_usuario INT UNIQUE NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario) ON DELETE CASCADE
+);
+-- Tabela SIM (SIM)
+CREATE TABLE SIM (
+    id_sim INT AUTO_INCREMENT PRIMARY KEY,
+    numero VARCHAR(20) UNIQUE NOT NULL,
+    data_registo DATETIME NOT NULL,
+    id_usuario INT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario) ON DELETE CASCADE
+);
+
+-- Tabela VERIFICACAO (VerificacaoSMS)
+CREATE TABLE VERIFICACAO (
+    id_verificacao INT AUTO_INCREMENT PRIMARY KEY,
+    codigo_enviado VARCHAR(10) NOT NULL,
+    timestamp_envio DATETIME NOT NULL,
+    validado BOOLEAN DEFAULT FALSE,
+    id_sim INT NOT NULL,
+    FOREIGN KEY (id_sim) REFERENCES SIM(id_sim) ON DELETE CASCADE
+);
+-- Tabela LOGS (LogAuditoria)
+CREATE TABLE LOGS (
+    id_log INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    ip VARCHAR(45) NOT NULL,
+    acao TEXT NOT NULL,
+    timestamp DATETIME NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario) ON DELETE CASCADE
+);
