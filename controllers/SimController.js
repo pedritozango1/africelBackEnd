@@ -52,6 +52,7 @@ class SimController {
             res.send(result[0]);
         });
     }
+
     listarSimPorUsuario(req) {
         const id_usuario = req.body.id_usuario;
         return new Promise((resolve, reject) => {

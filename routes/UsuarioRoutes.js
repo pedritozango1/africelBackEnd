@@ -72,16 +72,12 @@ router.post('/encontarPornumero', async (req, res) => {
                throw new Error("Formato inválido para form");
           }
      }
-     const usuario = await UsuarioController.encontrarPorBI(form.biNumber, res);
-     if (usuario) {
-          req.body.id_usuario = usurio.id_usuario;
-          const listaSim=await SimController.listarSimPorUsuario(req);
-          res.json({usuario,listaSim});
-          const usuario = await UsuarioController.encontrarPorBI(form.biNumber, res);
-     }else {
-          return res.status(404).json({ error: "Usuário não encontrado." });F
+     const usurio = await UsuarioController.encontrarPorBI(form.biNumber, res);
+     if (usurio) {
+           req.body.id_usuario = usurio.id_usuario;
+           const lostaSim=await SimController.listarSimPorUsuario(req);
+          res.json({usurio,lostaSim});
      }
-
 });
 router.post('/registarExistente', async (req, res) => {
      let form = req.body.form;
