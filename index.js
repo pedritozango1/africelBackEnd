@@ -14,17 +14,27 @@ const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TO
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
+
 app.post('/send-otp', async (req, res) => {
-    const { phone } = req.body;
-    try {
-        const verification = await client.verify.v2
-            .services(process.env.VERIFY_SERVICE_SID)
-            .verifications.create({ to: phone, channel: 'sms' });
-        res.json({ status: verification.status });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+  const { phone } = req.body;
+  try {
+    const verification = await client.verify.v2
+      .services(process.env.VERIFY_SERVICE_SID)
+      .verifications.create({ to: phone, channel: 'sms' });
+    res.json({ status: verification.status });
+  } catch (err) {
+    const code = err.code;
+    let message = 'Erro ao enviar código.';
+    if (code === 21608) {
+      message = 'Número não verificado — verifique-o no Twilio (trial).';
+    } else if (code === 21211) {
+      message = 'Número inválido. Use o formato +244XXXXXXXXX.';
     }
+    res.status(400).json({ error: message });
+  }
 });
+
+
 // Verifica o código OTP
 app.post('/check-otp', async (req, res) => {
     const { phone, code } = req.body;
