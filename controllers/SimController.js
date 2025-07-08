@@ -54,11 +54,13 @@ class SimController {
     }
 
     listarSimPorUsuario(req, res) {
-        const id_usuario = req.params.id_usuario;
-        this.simModel.listarPorUsuario(id_usuario, (err, results) => {
-            if (err) return res.status(500).send(err);
-            res.send(results);
-        });
+        const id_usuario = req.body.id_usuario;
+        return new Promise((resolve, reject) => {
+            this.simModel.listarPorUsuario(id_usuario, (err, results) => {
+                if (err) reject(err);
+                resolve(results);
+            });
+        })
     }
 
     deletarSim(req, res) {

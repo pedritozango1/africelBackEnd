@@ -71,9 +71,14 @@ router.post('/encontarPornumero', async (req, res) => {
           }
      }
      const usurio = await UsuarioController.encontrarPorBI(form.bi, res);
+     req.body.id_usuario = usurio.id_usuario;
      if (usurio) {
-          res.json(usurio);
+          const listaSim = await SimController.listarSimPorUsuario(req, res);
+          res.json({ usurio, listaSim });
+     } else {
+          return res.status(404).json({ error: "Usuário não encontrado." });
      }
+
 });
 router.get('/registarExistente', async (req, res) => {
      let form = req.body.form;
