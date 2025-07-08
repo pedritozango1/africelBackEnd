@@ -62,7 +62,9 @@ router.post(
 );
 // Rota com upload + dados
 router.post('/encontarPornumero', async (req, res) => {
+     console.log("Estou dentro cota!!");
      let form = req.body.form;
+     console.log(form)
      if (typeof form === 'string') {
           try {
                form = JSON.parse(form);
@@ -70,12 +72,14 @@ router.post('/encontarPornumero', async (req, res) => {
                throw new Error("Formato inválido para form");
           }
      }
-     const usurio = await UsuarioController.encontrarPorBI(form.bi, res);
+     const usurio = await UsuarioController.encontrarPorBI(form.biNumber, res);
      if (usurio) {
-          res.json(usurio);
+           req.body.id_usuario = usurio.id_usuario;
+           const lostaSim=await SimController.listarSimPorUsuario(req);
+          res.json({usurio,lostaSim});
      }
 });
-router.get('/registarExistente', async (req, res) => {
+router.post('/registarExistente', async (req, res) => {
      let form = req.body.form;
      if (typeof form === 'string') {
           try {
@@ -84,7 +88,7 @@ router.get('/registarExistente', async (req, res) => {
                throw new Error("Formato inválido para form");
           }
      }
-     const usurio = await UsuarioController.encontrarPorBI(form.bi, res);
+     const usurio = await UsuarioController.encontrarPorBI(form.biNumber, res);
      req.body.id_usuario = usurio.id_usuario;
      await SimController.criarSim(req);
      res.json({ messagem: 'Usuario Regitado com exito' });

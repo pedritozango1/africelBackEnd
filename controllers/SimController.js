@@ -53,11 +53,13 @@ class SimController {
         });
     }
 
-    listarSimPorUsuario(req, res) {
-        const id_usuario = req.params.id_usuario;
-        this.simModel.listarPorUsuario(id_usuario, (err, results) => {
-            if (err) return res.status(500).send(err);
-            res.send(results);
+    listarSimPorUsuario(req) {
+        const id_usuario = req.body.id_usuario;
+        return new Promise((resolve, reject) => {
+            this.simModel.listarPorUsuario(id_usuario, (err, result) => {
+                if (err) reject(err);
+                else resolve(result);
+            });
         });
     }
 
