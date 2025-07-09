@@ -47,6 +47,9 @@ app.post('/check-otp', async (req, res) => {
 app.use('/utilizador', usuarioRoutes);
 app.use("/sim", SimRoutes);
 app.use("/verificacao", VerificacaoRouter);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads', 'BI')));
+console.log("Servindo arquivos estáticos de:", path.join(__dirname, 'uploads', 'BI'));
+
 app.listen(3000, () => {
     console.log('🚀 Servidor rodando em http://localhost:3000');
 });
